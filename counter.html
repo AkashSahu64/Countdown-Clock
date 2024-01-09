@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Countdown Timer</title>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    .timer {
+      font-size: 72px;
+      color: #333;
+      margin-bottom: 20px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .button {
+      background-color: #333;
+      color: #fff;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    .button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Countdown Timer</h1>
+    <div id="timer" class="timer">00:00:00:00</div>
+    <div class="buttons">
+      <button id="startBtn" class="button" onclick="startTimer()">Start</button>
+      <button id="stopBtn" class="button" onclick="stopTimer()">Stop</button>
+      <button id="resetBtn" class="button" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    var timerInterval;
+    var startTime;
+    var currentTime = 0;
+    var timerRunning = false;
+
+    function startTimer() {
+      if (!timerRunning) {
+        startTime = Date.now() - currentTime;
+        timerInterval = setInterval(updateTimer, 10); 
+        timerRunning = true;
+      }
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerRunning = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      currentTime = 0;
+      updateTimer();
+      timerRunning = false;
+      document.getElementById("timer").textContent = "00:00:00:00"; 
+    }
+
+    function updateTimer() {
+      var elapsedTime = Date.now() - startTime;
+      currentTime = Math.floor(elapsedTime);
+
+      var hours = Math.floor(currentTime / 3600000);
+      var minutes = Math.floor((currentTime % 3600000) / 60000);
+      var seconds = Math.floor((currentTime % 60000) / 1000);
+      var milliseconds = currentTime % 1000;
+
+      var timerDisplay = document.getElementById("timer");
+      timerDisplay.textContent = formatTime(hours) + ":" + formatTime(minutes) + ":" + formatTime(seconds) + ":" + formatMilliseconds(milliseconds);
+    }
+
+    function formatTime(time) {
+      return time.toString().padStart(2, '0');
+    }
+
+    function formatMilliseconds(milliseconds) {
+      return milliseconds.toString().padStart(3, '0');
+    }
+  </script>
+</body>
+</html>
